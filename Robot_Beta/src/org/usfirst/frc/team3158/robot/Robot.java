@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.*;
 
 import edu.wpi.first.wpilibj.Joystick;
-
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,9 +25,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
+	public static final Subsystem MoveChassis = null;
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
-
+	public static MoveChassis move;
+	public static OI oi;
 	TalonSRX m1;
 	TalonSRX m2;
 	
@@ -44,6 +46,7 @@ public class Robot extends IterativeRobot {
 		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
+		move = new MoveChassis();
 		
 		m1 = new TalonSRX(1);
 		m2 = new TalonSRX(2);
@@ -67,6 +70,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		m_autoSelected = m_chooser.getSelected();
+		//Robot.moveChassis = new MoveChassis();
+
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
 		System.out.println("Auto selected: " + m_autoSelected);
@@ -94,8 +99,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
-		float r;
-		float l;
 		
 		m1.set(ControlMode.PercentOutput, jy.getY());
 		m2.set(ControlMode.PercentOutput, jy.getY());
